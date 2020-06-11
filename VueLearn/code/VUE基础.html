@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue-基础</title>
+    <style>
+        .actve{
+            border: 1px solid red;
+        }
+    </style>
+</head>
+
+<body>
+    <!--html结构-->
+    <div id="datalearn">
+        <!--大括号中的值叫插值表达式，作用就是把数据和页面结构关联起来-->
+        {{ message }}
+        <p>
+            {{datalearndic.key1}} {{datalearndic.key2}}
+        </p>
+        <h2>
+            {{datalearnlist[0]}}
+        </h2>
+    </div>
+
+    <div class="learnVtext">
+        <h2 v-text="datalearndic.key1 +'测试v-text'">两标签中的text不显示</h2>
+        <h2 v-text="datalearndic.key1 +'测试v-text字符串拼接'+'等号后的内容才会显示'"></h2>
+        <h2> {{datalearnlist[0]}} 两标签中的text也会显示</h2>
+        <h2> {{datalearnlist[0]+'测试v-text字符串拼接'}}</h2>
+    </div>
+
+    <div id="learnVhtml">
+        <p v-html="datadic.text"></p>
+        <p>{{datadic.text}}</p>
+        <p v-html="datadic.ishtml"></p>
+        <p>{{datadic.ishtml}}</p>
+    </div>
+
+    <div id="mouseevent">
+        <input type="button" value="v-on指令" v-on:click="event">
+        <input type="button" value="v-on指令用@代替" @click="event">
+        <button v-on:click="event">?</button>
+        <div></br></div>
+        <input type="button" value="v-on双击事件" @dbclick="event">
+        <h2 @click="changeVdata">{{ vdata }}</h2>
+        <h2 @click="foradd">{{ vdata }}</h2>
+
+    </div>
+
+    <div id="counter">
+        <button @click="sub"> - </button>
+        <span> {{ num }}</span>
+        <button @click="add"> + </button>
+        <div></br></div>
+    </div>
+
+    <div id="svg_picture">
+        <input type="button" value="切换图片显示/隐藏状态" @click="changeSVGstatus">
+        <img v-show="svg_status" src="小表情-19.svg" alt="">
+        <div></br></div>
+        <input type="button" value="点击增加数字到3图片出现" @click="addnum">
+        <span>{{ num }}</span>
+        <img v-show="num==3" src="小表情-19.svg" alt="">
+    </div>
+
+    <div id="ele_apper">
+        <p v-if="true">测试元素的显示/隐藏状态_v-if直接定义</p>
+        <p v-if="ele_status">测试元素的显示/隐藏状态_v-if间接定义</p>
+    </div>
+
+    <div id="img_bind">
+        <img :src="img_src" alt="" :title="imgtitle+'!!!'" :class="{actve:isactive}" @click=imgclick> 
+    </div>
+
+    
+    
+    
+    <!-- 导入vue.js,开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    
+
+
+    <!--创建vue实例-->
+    <!--el是元素选择器，例如所选元素id叫app，那么el就是“#app”，还可以选class等 类型的元素，就用“.app”；data就是实例中用到的数据-->
+    <script>
+        var datalearn = new Vue({
+            el:"#datalearn",
+            data:{
+                message:"Hello Vue!",
+                datalearndic:{
+                    key1:"value1",
+                    key2:"value2"
+                },
+                datalearnlist:["str0","str1","str2"]
+            }
+        })
+
+        var vtextlearn = new Vue({
+            el:".learnVtext",
+            data:{
+                message:"Hello Vue!",
+                datalearndic:{
+                    key1:"value1",
+                    key2:"value2"
+                },
+                datalearnlist:["str0","str1","str2"]
+            }
+        })
+        var vhtmllearn = new Vue({
+            el:"#learnVhtml",
+            data:{
+                datadic:{
+                    text:"文本内容而非html内容",
+                    ishtml:"<a href='http://www.baidu.com'>html内容而非文本内容</a>"
+                }
+            }
+        })
+        var events = new Vue({
+            el:"#mouseevent",
+            data:{
+                vdata:"testVdata"
+            },
+            methods:{
+                event:function(){
+                    alert("mouseenvent???");
+                },
+                changeVdata:function(){
+                    //可在log中打印信息
+                    console.log(this.vdata);
+                },
+                foradd:function(){
+                    //每一次点击都可以累加显示
+                    this.vdata+="+累加+"
+                }
+            },
+        })
+        var count = new Vue({
+            el:"#counter",
+            data:{
+                num:0
+            },
+            methods:{
+                add:function(){
+                    if(this.num<10){
+                        this.num+=1;
+                    }
+                    else{
+                        alert("已达到最大值")
+                    }
+                    console.log('add');
+                },
+                sub:function(){
+                    if(this.num>0){
+                        this.num-=1;
+                    }else{
+                        alert("已达到最小值")
+                    }
+                    console.log("sub")
+                }
+            }
+        })
+        var picture = new Vue({
+            el:"#svg_picture",
+            data:{
+                svg_status:false,
+                num:0
+            },
+            methods:{
+                changeSVGstatus:function(){
+                    this.svg_status = !this.svg_status;
+                },
+                addnum:function(){
+                    if(this.num<3){
+                        this.num++;
+                    }
+                    else{
+                        this.num = this.num-3
+                    }
+                }
+            },
+        })
+        var ele_apper = new Vue({
+            el:"#ele_apper",
+            data:{
+                ele_status:true,
+                num:5
+            },
+        })
+
+        var img_bind = new Vue({
+            el:"#img_bind",
+            data:{
+                img_src:"烤鸡腿.svg",
+                imgtitle:"测试v-bind",
+                isactive:false
+            },
+            methods:{
+                imgclick:function(){
+                    this.isactive = !this.isactive
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
