@@ -63,7 +63,7 @@
         <div></br></div>
         <input type="button" value="点击增加数字到3图片出现" @click="addnum">
         <span>{{ num }}</span>
-        <img v-show="num==3" src="小表情-19.svg" alt="">
+        <img v-show="num==3" src="/material/小表情-19.svg" alt="">
     </div>
 
     <div id="ele_apper">
@@ -193,7 +193,7 @@
         var img_bind = new Vue({
             el:"#img_bind",
             data:{
-                img_src:"烤鸡腿.svg",
+                img_src:"/material/烤鸡腿.svg",
                 imgtitle:"测试v-bind",
                 isactive:false
             },
