@@ -15,6 +15,18 @@
             width: 40%;
             margin: auto;
         }
+        .jobbox{
+            margin-bottom:5px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background:#f5f5f5;
+            position: relative;
+        }
+        .symbolclose{
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -112,9 +124,17 @@
 
     <div id="testNotepad" class="Notepad">
         <!--功能：有输入框，有显示列表，有列表标号，有事件总数，可单条删除，可一键清空，事件总数&一键清空在清空过后不显示-->
-        <h2 style="text-align: center;">test 记事本</h2>
-        <input type="text" style="margin:15%;" placeholder="请输入任务" >
-        <p v-for="(item,index) in jobarr">{{index+1}} .   {{item.job}}</p>
+        <h2 style="text-align: center;padding-top: 3rem;">test 记事本</h2>
+        <input v-model="jobmassage" @keyup.enter="addjob" style="margin-left: 15%;width: 70%;margin-bottom: 1rem;"placeholder="请输入任务" >
+        <div class="symbx">
+            <span  style="margin-left: 15%;width: 70%;display: block;"v-for="(item,index) in jobarr">{{index+1}} . <label >{{item}} <span @click="removejob"> &times; </span> </label> </span>
+        </div>
+        <div v-if="jobarr.length>0" style="margin-left: 15%;display: flex;">
+            <p>{{'当前job总数: '+jobarr.length}}</p>
+            <input type="button" value="clear all" style="margin-left: inherit;" @click="clearall">
+        </div>
+        
+        
 
     </div>
     
@@ -316,9 +336,20 @@
         var testNotepad = new Vue({
             el:"#testNotepad",
             data:{
-                jobarr:[{job:"吃饭"},{job:"睡觉"},{job:"打豆豆"}]
+                jobarr:["吃饭","睡觉","打豆豆"],
+                jobmassage:"请输入任务"
             },
-            methods:{},
+            methods:{
+                addjob:function(){
+                    this.jobarr.push(this.jobmassage);
+                },
+                removejob:function(){
+                    this.jobarr.splice(this.jobmassage,1)
+                },
+                clearall:function(){
+                    this.jobarr = []
+                }
+            },
         })
     </script>
 </body>
