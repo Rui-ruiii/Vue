@@ -9,6 +9,12 @@
         .actve{
             border: 1px solid red;
         }
+        .Notepad{
+            background-color: darksalmon;
+            height: 30rem;
+            width: 40%;
+            margin: auto;
+        }
     </style>
 </head>
 
@@ -47,7 +53,6 @@
         <input type="button" value="v-on双击事件" @dbclick="event">
         <h2 @click="changeVdata">{{ vdata }}</h2>
         <h2 @click="foradd">{{ vdata }}</h2>
-
     </div>
 
     <div id="counter">
@@ -59,11 +64,11 @@
 
     <div id="svg_picture">
         <input type="button" value="切换图片显示/隐藏状态" @click="changeSVGstatus">
-        <img v-show="svg_status" src="小表情-19.svg" alt="">
+        <img v-show="svg_status" src="../material/小表情-19.svg" alt="">
         <div></br></div>
         <input type="button" value="点击增加数字到3图片出现" @click="addnum">
         <span>{{ num }}</span>
-        <img v-show="num==3" src="小表情-19.svg" alt="">
+        <img v-show="num==3" src="../material/小表情-19.svg" alt="">
     </div>
 
     <div id="ele_apper">
@@ -75,8 +80,43 @@
         <img :src="img_src" alt="" :title="imgtitle+'!!!'" :class="{actve:isactive}" @click=imgclick> 
     </div>
 
+    <div id="test_changepicture">
+        <h2>点击下方箭头切换图片</br></h2>
+        <input type="button" value="<" v-show="index!=0"@click="subindex">
+        <img :src="imgarr[index]" alt="" >
+        <input type="button" value=">" v-show="index<imgarr.length-1" @click="addindex">
+    </div>
+
+    <div id="vfor">
+        <ul>
+            <li v-for="(item,index) in arr">序号：{{index + 1}}...这个列表中有：{{ item }}</li>
+        </ul>
+        <p v-for="item in objarr" v-bind:title="item.name">{{item.name}}</p>
+        <p v-for="item in objarr" v-bind:title="item.date">{{item.date}}</p>
+        <p v-for="item in objarr" v-bind:title="item.weather">{{item.weather}}</p>
+        <input type="button" value="点击添加新数据" @click="addobj">
+        <input type="button" value="点击移除旧数据" @click="removeobj">
+    </div>
     
-    
+    <div id="v_on_append">
+        <!--这里用到了键盘的enter修饰符，表示只有当按下回车时才会触发sayhi这个逻辑，更多修饰符位置在https://cn.vuejs.org/v2/api/#v-on这个地址-->
+        <input type="button" value="点击触发doit事件去F12console查看" @click="doit('老铁',666)">
+        <input type="text" style="width: 50%;" placeholder="输入任何字符串皆可，回车触发弹窗" @keyup.enter="sayhi">
+    </div>
+
+    <div id="vmodel">
+        <input type="button" value="修改为默认message" @click="setmessage">
+        <input type="text" v-model="message" @keyup.enter="getmessage">
+        <h2>广播我的输入内容为：{{message}}</h2>
+    </div>
+
+    <div id="testNotepad" class="Notepad">
+        <!--功能：有输入框，有显示列表，有列表标号，有事件总数，可单条删除，可一键清空，事件总数&一键清空在清空过后不显示-->
+        <h2 style="text-align: center;">test 记事本</h2>
+        <input type="text" style="margin:15%;" placeholder="请输入任务" >
+        <p v-for="(item,index) in jobarr">{{index+1}} .   {{item.job}}</p>
+
+    </div>
     
     <!-- 导入vue.js,开发环境版本，包含了有帮助的命令行警告 -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -193,7 +233,7 @@
         var img_bind = new Vue({
             el:"#img_bind",
             data:{
-                img_src:"烤鸡腿.svg",
+                img_src:"../material/烤鸡腿.svg",
                 imgtitle:"测试v-bind",
                 isactive:false
             },
@@ -202,6 +242,83 @@
                     this.isactive = !this.isactive
                 }
             }
+        })
+
+        var test_changepicture = new Vue({
+            el:"#test_changepicture",
+            data:{
+                index:0,
+                imgarr:[
+                    "../material/01.svg",
+                    "../material/02.svg",
+                    "../material/03.svg",
+                    "../material/04.svg",
+                    "../material/05.svg",
+                ]
+            },
+            methods:{
+                addindex:function(){
+                    this.index++;
+                },
+                subindex:function(){
+                    this.index--;
+                }
+            },
+        })
+        
+        var vfor = new Vue({
+            el:"#vfor",
+            data:{
+                arr:[2,4,6,8,10],
+                objarr:[{name:"Jack"},{name:"Rose"},{date:"0611"},{weather:"sunny"}]
+            },
+            methods:{
+                addobj:function(){
+                    // push的内容可以以后根据用户的输入加入到列表中，当前是写了一个固定的;
+                    //并且新添加的位置是在同名索引处，如果添加一个{addtext：“新内容”}，点击按钮就不会显示（因为在实例中没有让这个属性显示,就是说没有{{item.addtext}}）
+                    this.objarr.push({name:"这里是新添加的内容"})
+                },
+                removeobj:function(){
+                    //shift默认移除最左边的元素因此不必传参
+                    this.objarr.shift()
+                }
+            }
+        })
+
+        var v_on_append = new Vue({
+            el:"#v_on_append",
+            methods:{
+                doit:function(p1,p2){
+                    console.log(p1),
+                    console.log(p2)
+                },
+                sayhi:function(){
+                    alert("Bingo!~")
+                },
+            },
+        })
+
+        var vmodel = new Vue({
+            el:"#vmodel",
+            data:{
+                message:"学习v-model指令"
+            },
+            methods:{
+                getmessage:function(){
+                    alert(this.message)
+                },
+                setmessage:function(){
+                    this.message="这条就是默认值"
+                }
+            },
+        })
+
+        var testNotepad = new Vue({
+            el:"#testNotepad",
+            data:{
+                jobarr:[{job:"吃饭"},{job:"睡觉"},{job:"打豆豆"}]
+            },
+            methods:{},
         })
     </script>
 </body>
