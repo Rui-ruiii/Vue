@@ -205,3 +205,24 @@ var testNotepad = new Vue({
         }
     },
 })
+
+/*
+接下来是axios的相关js
+接口：随机获取一条笑话
+请求地址：https://autumnfish.cn/api/joke
+请求方法：get
+请求参数：无
+相应内容：随机笑话
+*/
+var joke = new Vue({
+        el:"#joke",
+        data:{
+            joke:"笑话内容"
+        },
+        methods:{
+            getjoke:function(){
+                var that = this;
+                axios.get("https://autumnfish.cn/api/joke").then(function(response){that.joke = response.data},function(error){})
+            }
+        }
+    })
